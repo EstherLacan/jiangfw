@@ -15,5 +15,6 @@ myTest();
 myTest();
 myTest();
 myTest();
+echo "1234";
 
 ?>
