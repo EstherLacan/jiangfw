@@ -17,3 +17,4 @@ print_r($arr2);
 var_dump($arr2);
 
 print_r($_SERVER);
+print_r($arr."1234567890");
