@@ -16,5 +16,6 @@ myTest();
 myTest();
 myTest();
 echo "1234";
+echo "git push";
 
 ?>
