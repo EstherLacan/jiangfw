@@ -1,0 +1,8 @@
+git log --graph
+git log -p
+git log --oneline --author=lwx455016
+git log --oneline --author=lwx455016 -- */*..milestones.xml
+
+git log -20  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%h - %s (%cd) <%an>'
+git log -20  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset'
+git log  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --   DigitalCRM_TransferOwner/com.huawei.bes.om.base_transferowner_c/com.huawei.bes.om.bizspec4transferowner.plugin/src/main/resources/data/ValidationItems/TransferOwnerValidate.vldtItem.xml
