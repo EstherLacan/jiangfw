@@ -1,0 +1,30 @@
+搜索jar包下文件的内容
+find . -iname '*.jar' -print | while read jar; do
+  unzip -qq -l $jar | sed 's/.* //'|grep xml | while read cls; do
+    unzip -c $jar $cls | grep -nq '/bes/artificial/common/querycustomerbo' && echo  "$jar:"$cls
+  done
+done
+查看jar包下的文件内容
+find . -iname '*.jar' -print | while read jar; do
+  unzip -qq -l $jar | sed 's/.* //'|grep '/TransferOwnerValidate.vldtItem.xml' | while read cls; do
+    unzip -c $jar $cls ;
+  done;
+done
+
+find . -iname '*.jar' -print | while read jar; do  unzip -qq -l $jar | sed 's/.* //'|grep '/TransferOwnerValidate.vldtItem.xml' | while read cls; do    unzip -c $jar $cls;   done; done
+
+查看jar包下的文件的路径
+find . -iname '*.jar' -print | while read jar; do
+  unzip -qq -l $jar | sed 's/.* //'|grep '/com.huawei.bes.cm.biz.subscription4telecom.EntityStateChgService' 
+done
+
+find . -iname '*.jar' -print | while read jar; do
+  unzip -qq -l $jar | sed 's/.* //'|grep '/com.huawei.bes.cm.biz.subscription4telecom.EntityStateChgService' | while read cls; do
+    echo  "$jar:" $cls 
+  done
+done
+
+
+搜索jar下的文件
+find . -iname '*.jar' -print|xargs grep 'ProcessGroupFNDependTransferOwner.fulfDepend.xml'
+find . -iname '*.jar' -print|xargs grep 'ChangeNumberItemRecogn.recogn.xml'
