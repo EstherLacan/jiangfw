@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>array.@@iterator</title>
+<script type="text/javascript" src="../jquery.js"></script>
+<script type="text/javascript">
+var arr = ['w', 'y', 'k', 'o', 'p'];
+var eArr = arr[Symbol.iterator]();
+// your browser must support for..of loop
+// and let-scoped variables in for loops
+for (let letter of eArr) {
+  console.log(letter);
+}
+
+//var arr = ['w', 'y', 'k', 'o', 'p'];
+//var eArr = arr[Symbol.iterator]();
+console.log(eArr.next().value); // w
+console.log(eArr.next().value); // y
+console.log(eArr.next().value); // k
+console.log(eArr.next().value); // o
+console.log(eArr.next().value); // p
+
+</script>
+
+</head>
+
+
+<body>
+
+</body>
+</html>

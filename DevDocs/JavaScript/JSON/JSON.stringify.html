@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JSON.stringify</title>
+<script type="text/javascript" src="../jquery.js"></script>
+<script type="text/javascript">
+JSON.stringify({});                  // '{}'
+JSON.stringify(true);                // 'true'
+JSON.stringify('foo');               // '"foo"'
+JSON.stringify([1, 'false', false]); // '[1,"false",false]'
+JSON.stringify({ x: 5 });            // '{"x":5}'
+
+JSON.stringify(new Date(2006, 0, 2, 15, 4, 5)) 
+// '"2006-01-02T15:04:05.000Z"'
+
+JSON.stringify({ x: 5, y: 6 });
+// '{"x":5,"y":6}'
+JSON.stringify([new Number(3), new String('false'), new Boolean(false)]);
+// '[1,"false",false]'
+
+JSON.stringify({ x: [10, undefined, function(){}, Symbol('')] }); 
+// '{"x":[10,null,null,null]}' 
+ 
+// Symbols:
+JSON.stringify({ x: undefined, y: Object, z: Symbol('') });
+// '{}'
+JSON.stringify({ [Symbol('foo')]: 'foo' });
+// '{}'
+JSON.stringify({ [Symbol.for('foo')]: 'foo' }, [Symbol.for('foo')]);
+// '{}'
+JSON.stringify({ [Symbol.for('foo')]: 'foo' }, function(k, v) {
+  if (typeof k === 'symbol') {
+    return 'a symbol';
+  }
+});
+// '{}'
+
+// Non-enumerable properties:
+JSON.stringify( Object.create(null, { x: { value: 'x', enumerable: false }, y: { value: 'y', enumerable: true } }) );
+// '{"y":"y"}'
+
+/** REPLACER */
+
+function replacer(key, value) {
+//debugger;
+  // Filtering out properties
+  if (typeof value === 'string') {
+    return undefined;
+  }
+  return value;
+}
+
+var foo = {foundation: 'Mozilla', model: 'box', week: 45, transport: 'car', month: 7};
+JSON.stringify(foo, replacer);
+// '{"week":45,"month":7}'
+
+console.log(JSON.stringify(foo, ['week', 'transport']),"___jfw");
+
+var obj = {
+  foo: 'foo',
+  toJSON: function() {
+  //debugger;
+    return 'bar';
+  }
+};
+JSON.stringify(obj);        // '"bar"'
+console.log(JSON.stringify({ x: obj })); // '{"x":"bar"}'
+
+var obj2 = {
+  foo: 'foo',
+  toJSON: function(key) {
+    if (key === '') {
+      return 'bar only';
+    } else {
+      return 'bar in ' + key;
+    }
+  }
+};
+
+console.log(JSON.stringify(obj2));         // '"bar only"'
+console.log(JSON.stringify({ x: obj2 }));  // '{ "x":"bar in x"}'
+console.log(JSON.stringify([obj2, obj2])); // '["bar in 0", "bar in 1"]'
+</script>
+
+</head>
+
+
+<body>
+
+</body>
+</html>
