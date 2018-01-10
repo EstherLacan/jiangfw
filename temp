@@ -2,6 +2,7 @@ besread/huaweif2
 Nginx-Web	100.107.215.183	100.107.183.180	100.107.246.172	100.107.230.184	100.107.230.234	实现对DigitalCRM营业前台和管理前台应用网元的负载均衡，同时采用Varnish实现对静态资源的缓存。
 TableAu
 
+jfrog artifactory
 https://szxy4.artifactory.cd-cloud-artifact.tools.huawei.com/artifactory/webapp/#/home
 Artifactory is happily serving 3,513,373 artifacts
 
