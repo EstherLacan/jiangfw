@@ -10,3 +10,7 @@ Artifactory is happily serving 3,513,373 artifacts
 git update-index --assume-unchanged */.classpath
 撤销忽略追踪文件
 git update-index --no-assume-unchanged */.classpath
+
+phantomjs
+dbeaver
+
