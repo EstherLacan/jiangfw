@@ -1,0 +1,145 @@
+http://www.cnblogs.com/edisonchou/p/4426096.html
+#cd /opt/hadoopclient/
+#source bigdata_env
+#kinit -kt /opt/hdfs.keytab hdfs/hadoop
+#beeline
+#show databases;           （展示数据库列表）
+#use linwenjie_cqy_cqy      (进入数据ku               （展示数据表列表）
+#select * from linwenjie_aa; (查看数据表里面的数据)
+#desc linwnjie_userinfo3；      (查看数据表结构)
+#truncate table test_guyan1;清表命令
+#alter user dtm account unlock;  oracle数据库解锁
+
+--查看分区的信息  该语句以字母顺序列出指定表中的全部分区。
+show partitions dwd_stat.t_consumed_user_daily;
+show partitions dwd_stat.t_consumed_user_daily partition(consumedate='20170705');
+
+---查看 ddl脚本
+Show Create Table table_name;
+SHOW [FORMATTED](INDEX|INDEXES) ON table_with_index [(FROM|IN) db_name]
+SHOW COLUMNS(FROM|IN) table_name [(FROM|IN) db_name]
+SHOW FUNCTIONS "a.*"
+show functions;
+describe function substr;
+       desc function extended  split ;
+
+Show Transactions
+
+--查看分区所在的元数据（类似desc）
+describe dwd_stat.t_consumed_user_daily partition(consumedate='20170719');
+-------------------------------------------------------------------------------------------------------------------------
+hive分区：
+必须在表定义时创建partition
+a、单分区建表语句：create table day_table (id int, content string) partitioned by (dt string);单分区表，按天分区，在表结构中存在id，content，dt三列。
+以dt为文件夹区分
+b、 双分区建表语句：create table day_hour_table (id int, content string) partitioned by (dt string, hour string);双分区表，按天和小时分区，在表结构中新增加了dt和hour两列。
+先以dt为文件夹，再以hour子文件夹区分
+-- 创建临时表，只有表结构
+use default;
+
+drop table if exists kimbo_test2 ;
+
+create table kimbo_test2 as select * from default.kimbo_test where 1=0;
+
+
+
+-- 创建临时表，插入数据
+use default;
+
+drop table if exists kimbo_test3 ;
+
+create table kimbo_test3 as select * from default.kimbo_test；
+
+ 
+添加分区表语法（表已创建，在此基础上添加分区）：ALTER TABLE table_name ADD
+partition_spec [ LOCATION 'location1' ]
+partition_spec [ LOCATION 'location2' ] ...
+ALTER TABLE day_table ADD
+PARTITION (dt='2008-08-08', hour='08')
+location '/path/pv1.txt'
+ 
+删除分区语法：ALTER TABLE table_name DROP partition_spec, partition_spec,...
+用户可以用 ALTER TABLE DROP PARTITION 来删除分区。分区的元数据和数据将被一并删除。例：
+ALTER TABLE day_hour_table DROP PARTITION (dt='2008-08-08', hour='09');
+alter table dwd_cdr.t_userbase_daily drop partition(dtime=__HIVE_DEFAULT_PARTITION__)
+数据加载进分区表中语法：
+LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)]
+例：
+LOAD DATA INPATH '/user/pv.txt' INTO TABLE day_hour_table PARTITION(dt='2008-08- 08', hour='08'); 
+LOAD DATA local INPATH '/user/hua/*' INTO TABLE day_hour partition(dt='2010-07- 07');
+当数据被加载至表中时，不会对数据进行任何转换。Load操作只是将数据复制至Hive表对应的位置。数据加载时在表下自动创建一个目录
+基于分区的查询的语句：SELECT day_table.* FROM day_table WHERE day_table.dt>= '2008-08-08';
+查看分区语句：
+hive> show partitions day_hour_table; OK dt=2008-08-08/hour=08 dt=2008-08-08/hour=09 dt=2008-08-09/hour=09
+
+--------------------------------------------------------------------------------------------------------------------
+导出数据到hdfs
+
+hive:/>insert overwrite directory '/test' row format delimited fields terminated by '|' select *  from dwd_resource_report.t_operation_analysis_hbase where dtime ='20170914'
+
+查看hdfs
+edata-sdk-04:~ # hadoop fs -ls /test
+-rwxr-xr-x   3 hdfs supergroup        560 2017-10-27 16:21 /test/000000_0
+
+edata-sdk-04:~ # hadoop fs -cat /test/000000_0
+
+操作本地和hdfs之间的文件
+/opt/hadoopclient # hadoop fs -get    /test/000000_0
+/opt/hadoopclient # hadoop fs -put 000000_0   /test
+
+load data inpath '/test/000000_0' into table dwd_resource_report.mv_incomeusercount_daily;
+load data local inpath '/home/BlueBreeze/data/t_hft_1.csv' overwrite into table t_hft partition(tradeDate=20130627);
+
+CREATE TABLE `jiangfw.mv_consumeduser_daily`(                   
+  `customerid` string,                                          
+  `servicekindomid` string,                                     
+  `servicetypecode` string,                                     
+  `productname` string,                                         
+  `resourcetypecode` string,                                    
+  `resourcetypename` string,                                    
+  `regioncode` string,                                          
+  `chargingmode` string,                                        
+  `channeltype` string,                                         
+  `channelid` string,                                           
+  `customersortid` string,                                      
+  `grade` string,                                               
+  `dtime` string)                                               
+ROW FORMAT SERDE                                                
+  'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'  
+WITH SERDEPROPERTIES (                                       
+  'field.delim'='|',                                         
+  'serialization.format'='|')  
+STORED AS INPUTFORMAT                                           
+  'org.apache.hadoop.mapred.TextInputFormat'                  
+OUTPUTFORMAT                                                  
+  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'  
+TBLPROPERTIES ( 
+ 'COLUMN_STATS_ACCURATE'='true',                                                
+  'transient_lastDdlTime'='1509389193')
+
+
+
+
+　   将score1的数据自动分区的导入到score
+       设置自动分区等参数
+       set  hive.exec.dynamic.partition=true;
+       set  hive.exec.dynamic.partition.mode=nonstrict;
+       set  hive.exec.max.dynamic.partitions.pernode=10000; 
+
+       insert overwrite table score partition(openingtime) select id,studentid,score,openingtime from score1;
+
+load data inpath '/test/mv_consumercount_daily/000000_4' into table jiangfw.mv_consumercount_daily;  --先把数据导入到没有分区的表中
+insert overwrite table dwd_resource_report.mv_consumercount_daily partition(dtime) select * from jiangfw.mv_consumercount_daily;--再把未分区的表数同步到分区表中
+
+我们先清空score表的数据（3个分区）
+insert overwrite table score partition(openingtime=201507,openingtime=201508,openingtime=201509) select id,studentid,score from score where 1==0;
+
+
+命令行模式： hive -S -e "load data local inpath '/home/zhangshaosheng/kimbo_test.txt' overwrite into table default.kimbo_test;"
+命令行模式： hive -S -e "select * from default.kimbo_test; " >kimbo_test7.txt
+
+
+
+
+
+
