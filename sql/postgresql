@@ -1,0 +1,3 @@
+SELECT a.count,b.node_name FROM (
+SELECT COUNT(*) AS count,xc_node_id FROM dwd_cdr.t_pageview_detail_ex GROUP BY xc_node_id) a, 
+pgxc_node b WHERE a.xc_node_id=b.node_id ORDER BY a.count desc
