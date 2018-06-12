@@ -1,14 +1,15 @@
+#coding=utf-8
 from captcha.image import ImageCaptcha  # pip install captcha
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 import random
  
-# ÑéÖ¤ÂëÖĞµÄ×Ö·û, ¾Í²»ÓÃºº×ÖÁË
+# éªŒè¯ç ä¸­çš„å­—ç¬¦, å°±ä¸ç”¨æ±‰å­—äº†
 number = ['0','1','2','3','4','5','6','7','8','9']
 alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 ALPHABET = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-# ÑéÖ¤ÂëÒ»°ã¶¼ÎŞÊÓ´óĞ¡Ğ´£»ÑéÖ¤Âë³¤¶È4¸ö×Ö·û
+# éªŒè¯ç ä¸€èˆ¬éƒ½æ— è§†å¤§å°å†™ï¼›éªŒè¯ç é•¿åº¦4ä¸ªå­—ç¬¦
 def random_captcha_text(char_set=number+alphabet+ALPHABET, captcha_size=4):
 	captcha_text = []
 	for i in range(captcha_size):
@@ -16,7 +17,7 @@ def random_captcha_text(char_set=number+alphabet+ALPHABET, captcha_size=4):
 		captcha_text.append(c)
 	return captcha_text
  
-# Éú³É×Ö·û¶ÔÓ¦µÄÑéÖ¤Âë
+# ç”Ÿæˆå­—ç¬¦å¯¹åº”çš„éªŒè¯ç 
 def gen_captcha_text_and_image():
 	image = ImageCaptcha()
  
@@ -24,14 +25,14 @@ def gen_captcha_text_and_image():
 	captcha_text = ''.join(captcha_text)
  
 	captcha = image.generate(captcha_text)
-	#image.write(captcha_text, captcha_text + '.jpg')  # Ğ´µ½ÎÄ¼ş
+	#image.write(captcha_text, captcha_text + '.jpg')  # å†™åˆ°æ–‡ä»¶
  
 	captcha_image = Image.open(captcha)
 	captcha_image = np.array(captcha_image)
 	return captcha_text, captcha_image
  
 if __name__ == '__main__':
-	# ²âÊÔ
+	# æµ‹è¯•
 	text, image = gen_captcha_text_and_image()
  
 	f = plt.figure()
