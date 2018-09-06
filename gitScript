@@ -1,3 +1,5 @@
+git push origin :branch1    --删除本地和远程的分支branch1
+
 git log --graph
 git log -p
 git log --oneline --author=lwx455016
@@ -6,3 +8,14 @@ git log --oneline --author=lwx455016 -- */*..milestones.xml
 git log -20  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%h - %s (%cd) <%an>'
 git log -20  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset'
 git log  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --   DigitalCRM_TransferOwner/com.huawei.bes.om.base_transferowner_c/com.huawei.bes.om.bizspec4transferowner.plugin/src/main/resources/data/ValidationItems/TransferOwnerValidate.vldtItem.xml
+
+git log  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' -- ./FSIntfTransferBillingChangeSubOwnerTransf.transf.xml
+
+--指定作者
+git log --author="jwx542257" --since==2018-07-11 --before==2018-07-12 --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }'
+
+--代码统计
+git log --format=%an --no-merges |sort -u | while read name; do git log --author="$name" --since=2018-08-21 --until=2018-08-22  --no-merges --pretty=tformat: --numstat | awk -v name="$name" '{ add += $1; subs += $2; loc += $1 - $2 } END { if(add != "") printf "%-20s --> added lines: %5s, removed lines: %5s, total lines: %5s\n",name,add, subs, loc }'; done
+
+--显示某一个提交的记录
+git log d49201899cced7fa32b3b1983967753a1e09d91c --pretty=tformat: --numstat -1 -- */GenerateHttpHeaderUtil.java
