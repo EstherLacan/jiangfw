@@ -12,7 +12,7 @@ git log  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Cres
 git log  --color --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' -- ./FSIntfTransferBillingChangeSubOwnerTransf.transf.xml
 
 --指定作者
-git log --author="jwx542257" --since="2018-08-21 00:00:00" --before==2018-07-12 --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }'
+git log --author="jiangfw" --since="2018-08-21 00:00:00" --before==2018-07-12 --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }'
 
 --代码统计
 git log --format=%an --no-merges |sort -u | while read name; do git log --author="$name" --since="2018-08-21 00:00:00" --until=2018-08-22  --no-merges --pretty=tformat: --numstat | awk -v name="$name" '{ add += $1; subs += $2; loc += $1 - $2 } END { if(add != "") printf "%-20s --> added lines: %5s, removed lines: %5s, total lines: %5s\n",name,add, subs, loc }'; done
